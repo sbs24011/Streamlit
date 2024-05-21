@@ -12,12 +12,12 @@ def load_data(file):
 def plot_data(data, title, year, colour, max_results):
     st.subheader(title)
     summary = data[data['year'] == year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
-    summary = summary.sort_values(by='Quantityintonnes', ascending=True)
+    summary = summary.sort_values(by='Quantityintonnes', ascending=False)
     # st.write(summary)
     if max_results != 'No Limit':
         summary = summary.head(int(max_results))
         
-    chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour])
+    chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour], category_orders={"Partner": summary['Partner'].values.tolist()})
     st.plotly_chart(chart)
 
 uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
