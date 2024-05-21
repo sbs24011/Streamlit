@@ -35,14 +35,17 @@ exports_data = load_data(exports_url)
 st.header("Ireland's Dairy Trade Analysis")
 
 if imports_data is not None and exports_data is not None:
+    selected_dataset = st.selectbox("Select the Dataset for Plotting", ['Both', 'Imports', 'Exports'])
     selected_product_group = st.selectbox("Select Product Group", imports_data['ProductGroup'].unique())
 
-    selected_max_results = st.selectbox("Select Maximum Results per Graph", ['No Limit', '5', '10', '20'])
+    selected_max_results = st.selectbox("Select Maximum Results per Plot", ['No Limit', '5', '10', '20'])
 
     filtered_imports = imports_data[imports_data['ProductGroup'] == selected_product_group]
     filtered_exports = exports_data[exports_data['ProductGroup'] == selected_product_group]
 
-    plot_data(filtered_imports, f"Imports of {selected_product_group} on {selected_year}", selected_year, '#1f77b4', selected_max_results)
-    plot_data(filtered_exports, f"Exports of {selected_product_group} on {selected_year}", selected_year, '#ff7f0e', selected_max_results)
+    if selected_dataset in ['Both', 'Imports']: 
+        plot_data(filtered_imports, f"Imports of {selected_product_group} on {selected_year}", selected_year, '#1f77b4', selected_max_results)
+    if selected_dataset in ['Both', 'Exports']: 
+        plot_data(filtered_exports, f"Exports of {selected_product_group} on {selected_year}", selected_year, '#ff7f0e', selected_max_results)
 else:
     st.write("Please upload both imports and exports CSV files.")
