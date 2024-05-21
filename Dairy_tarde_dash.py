@@ -1,11 +1,18 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import requests
+from io import StringIO
 
-# Cache data loading function
-@st.cache_data(hash_funcs={pd.DataFrame: lambda _: None})
+# Function to load data from GitHub
+@st.cache(allow_output_mutation=True)
 def load_data_from_github(url):
-    return pd.read_csv(url)
+    response = requests.get(url)
+    if response.status_code == 200:
+        return pd.read_csv(StringIO(response.text))
+    else:
+        st.error(f"Failed to load data from {url}")
+        return None
 
 # Function to plot data by Partner
 def plot_data_by_partner(data, title, year):
@@ -13,7 +20,7 @@ def plot_data_by_partner(data, title, year):
     summary = data[data['year'] == year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
     st.write(summary)
     chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title,
-                   color='Quantityintonnes', color_continuous_scale='Blues')
+                   color_discrete_sequence=['#1f77b4'])  # Specify a single color for all bars
     st.plotly_chart(chart)
 
 # Function to plot data by ProductGroup
@@ -22,7 +29,7 @@ def plot_data_by_product_group(data, title, year):
     summary = data[data['year'] == year].groupby('ProductGroup')['Quantityintonnes'].sum().reset_index()
     st.write(summary)
     chart = px.bar(summary, x='Quantityintonnes', y='ProductGroup', orientation='h', title=title,
-                   color='Quantityintonnes', color_continuous_scale='Blues')
+                   color_discrete_sequence=['#ff7f0e'])  # Specify a single color for all bars
     st.plotly_chart(chart)
 
 # GitHub URLs for datasets
