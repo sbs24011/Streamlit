@@ -26,8 +26,8 @@ def plot_data_by_product_group(data, title, year):
     st.plotly_chart(chart)
 
 # GitHub URLs for datasets
-imports_url = "https://github.com/sbs24011/Streamlit/blob/main/ireland_imports.csv?raw=true"
-exports_url = "https://github.com/sbs24011/Streamlit/blob/main/ireland_exports.csv?raw=true"
+imports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv"
+exports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv"
 
 # Load data
 imports_data = load_data_from_github(imports_url)
@@ -100,4 +100,12 @@ if imports_data is not None and exports_data is not None:
         st.plotly_chart(filtered_imports_chart)
     
     if partners_export:
-        filtered_exports = exports_data[(exports_data['year'] == selected_year
+        filtered_exports = exports_data[(exports_data['year'] == selected_year) & 
+                                        (exports_data['ProductGroup'] == selected_product_group_export) &
+                                        (exports_data['Partner'].isin(partners_export))]
+        st.subheader(f"Filtered Exports for {selected_product_group_export} in {selected_year}")
+        st.write(filtered_exports)
+        filtered_exports_chart = px.bar(filtered_exports, x='Quantityintonnes', y='Partner', orientation='h',
+                                        title=f"Filtered Dairy Exports for {selected_product_group_export} by Partner ({selected_year})",
+                                        color='Quantityintonnes', color_continuous_scale='Blues')
+        st.plotly_chart(filtered_exports_chart)
