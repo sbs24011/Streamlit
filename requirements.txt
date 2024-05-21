@@ -1,5 +1,6 @@
 streamlit
 pandas
 numpy
-plotly
-plotly-express
+scipy
+matplotlib
+plotly==5.9.0
