@@ -24,14 +24,13 @@ def plot_data(data, title, year, colour, max_results):
 #uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
 #uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-imports_file = os.path.join(current_dir, "imports.csv")
-exports_file = os.path.join(current_dir, "exports.csv")
+imports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv"
+exports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv"
 
 selected_year = st.selectbox("Select Year", [2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010])
 
-imports_data = load_data(imports_file)
-exports_data = load_data(exports_file)
+imports_data = load_data(imports_url)
+exports_data = load_data(exports_url)
 
 st.header("Ireland's Dairy Trade Analysis")
 
