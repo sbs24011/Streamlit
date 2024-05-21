@@ -3,7 +3,7 @@
 #!pip install streamlit
 
 import streamlit as st
-import pydeck as pdk
+import plotly.express as px
 import pandas as pd
 
 @st.cache
