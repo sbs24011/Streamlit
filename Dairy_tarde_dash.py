@@ -25,9 +25,6 @@ exports_data = load_data(uploaded_exports)
 
 st.header("Ireland's Dairy Trade Analysis")
 
-plot_data(imports_data, f"Dairy Imports by Partner ({selected_year})", selected_year)
-    plot_data(exports_data, f"Dairy Exports by Partner ({selected_year})", selected_year)
-
 if imports_data is not None and exports_data is not None:
     selected_product_group = st.selectbox("Select Product Group", imports_data['ProductGroup'].unique())
 
