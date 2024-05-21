@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import gdown
+import os
 
 @st.cache_data(hash_funcs={pd.DataFrame: lambda _: None})
 def load_data(file):
