@@ -8,7 +8,7 @@ import gdown
 def load_data_from_google_drive(url):
     output_file = "/tmp/ireland_data.csv"
     gdown.download(url, output_file, quiet=False)
-    return pd.read_csv(output_file)
+    return pd.read_csv(output_file, encoding='utf-8')
 
 # Google Drive URLs for datasets
 imports_url = "https://drive.google.com/uc?id=1fkHA9OjW97qqhL2Eci6FYNah3hfqkw45"
