@@ -4,3 +4,4 @@ numpy
 scipy
 matplotlib
 plotly==5.9.0
+gdown

@@ -21,16 +21,21 @@ exports_data = load_data_from_google_drive(exports_url)
 # Main header
 st.header("Ireland's Dairy Trade Imports and Exports Analysis")
 
-# Subheader for Imports Analysis
-st.subheader("Imports Analysis")
-summary_imports = imports_data.groupby(['year', 'ProductGroup'])['Quantityintonnes'].sum().reset_index()
-fig_imports = px.bar(summary_imports, x='year', y='Quantityintonnes', color='ProductGroup', 
-                     title="Dairy Imports by Product Group per Year", barmode='group')
-st.plotly_chart(fig_imports)
+# Selection for Product Group Analysis
+selected_product_group = st.selectbox("Select Product Group", imports_data['ProductGroup'].unique())
 
-# Subheader for Exports Analysis
-st.subheader("Exports Analysis")
-summary_exports = exports_data.groupby(['year', 'ProductGroup'])['Quantityintonnes'].sum().reset_index()
-fig_exports = px.bar(summary_exports, x='year', y='Quantityintonnes', color='ProductGroup', 
-                     title="Dairy Exports by Product Group per Year", barmode='group')
-st.plotly_chart(fig_exports)
+# Filter data by selected product group
+filtered_imports = imports_data[imports_data['ProductGroup'] == selected_product_group]
+filtered_exports = exports_data[exports_data['ProductGroup'] == selected_product_group]
+
+# Create summary for imports by year
+summary_imports = filtered_imports.groupby('year')['Quantity'].sum().reset_index()
+chart_imports = px.bar(summary_imports, x='year', y='Quantity', title=f"Imports of {selected_product_group} Over Years",
+                       color_discrete_sequence=['#1f77b4'])
+st.plotly_chart(chart_imports)
+
+# Create summary for exports by year
+summary_exports = filtered_exports.groupby('year')['Quantity'].sum().reset_index()
+chart_exports = px.bar(summary_exports, x='year', y='Quantity', title=f"Exports of {selected_product_group} Over Years",
+                       color_discrete_sequence=['#ff7f0e'])
+st.plotly_chart(chart_exports)
