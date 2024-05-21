@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
-#!pip install streamlit
-#!pip install plotly
-
-
 import streamlit as st
-import pydeck as pdk
 import pandas as pd
-import plotly.express as px
+
+try:
+    import plotly.express as px
+except ImportError as e:
+    st.error(f"Error importing plotly: {e}")
+    st.stop()
 
 @st.cache
 def load_data(uploaded_file):
@@ -15,8 +15,8 @@ def load_data(uploaded_file):
         data = pd.read_csv(uploaded_file)
         return data
 
-uploaded_imports = st.file_uploader("ireland_exports", type="csv")
-uploaded_exports = st.file_uploader("ireland_imports", type="csv")
+uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
+uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
 
 years = [2021, 2022, 2023]
 selected_year = st.selectbox("Select Year", years)
