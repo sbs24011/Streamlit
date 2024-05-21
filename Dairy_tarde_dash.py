@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+@st.cache_data(hash_funcs={pd.DataFrame: lambda _: None})
 def load_data(uploaded_file):
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)
