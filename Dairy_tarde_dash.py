@@ -1,14 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[4]:
-
-
 #!pip install streamlit
-
-
-# In[3]:
-
 
 import streamlit as st
 import pydeck as pdk
@@ -16,88 +8,50 @@ import pandas as pd
 
 
 @st.cache
-def from_data_file(filename):
-    url = (
-        "http://raw.githubusercontent.com/streamlit/"
-        "example-data/master/hello/v1/%s" % filename
+def load_data(uploaded_file):
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        return data
+
+uploaded_imports = st.file_uploader("ireland_exports", type="csv")
+uploaded_exports = st.file_uploader("ireland_imports", type="csv")
+
+years = [2021,2022, 2023]
+selected_year = st.selectbox("Select Year", years)
+
+
+imports_data = load_data(uploaded_imports)
+exports_data = load_data(uploaded_exports)
+
+if imports_data is not None and exports_data is not None:
+    st.header("Dairy Imports")
+    st.subheader(f"Sum by Partners - {selected_year}")
+    imports_sum_by_partners = imports_data[imports_data['year'] == selected_year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
+    st.write(imports_sum_by_partners)
+
+    st.header("Dairy Exports")
+    st.subheader(f"Sum by Partners - {selected_year}")
+    exports_sum_by_partners = exports_data[exports_data['year'] == selected_year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
+    st.write(exports_sum_by_partners)
+
+    # Visualization using Altair
+    st.subheader("Bar Chart Visualization")
+    imports_chart = alt.Chart(imports_sum_by_partners).mark_bar().encode(
+        x='Quantityintonnes:Q',
+        y=alt.Y('Partner:N', sort='-x')
+    ).properties(
+        title=f"Dairy Imports by Partner - {selected_year}",
+        width=600,
+        height=400
     )
-    return pd.read_json(url)
+    st.altair_chart(imports_chart)
 
-try:
-    ALL_LAYERS = {
-        "Bike Rentals": pdk.Layer(
-            "HexagonLayer",
-            data=from_data_file("bike_rental_stats.json"),
-            get_position=["lon", "lat"],
-            radius=200,
-            elevation_scale=4,
-            elevation_range=[0, 1000],
-            extruded=True,
-        ),
-        "Bart Stop Exits": pdk.Layer(
-            "ScatterplotLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_color=[200, 30, 0, 160],
-            get_radius="[exits]",
-            radius_scale=0.05,
-        ),
-        "Bart Stop Names": pdk.Layer(
-            "TextLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_text="name",
-            get_color=[0, 0, 0, 200],
-            get_size=15,
-            get_alignment_baseline="'bottom'",
-        ),
-        "Outbound Flow": pdk.Layer(
-            "ArcLayer",
-            data=from_data_file("bart_path_stats.json"),
-            get_source_position=["lon", "lat"],
-            get_target_position=["lon2", "lat2"],
-            get_source_color=[200, 30, 0, 160],
-            get_target_color=[200, 30, 0, 160],
-            auto_highlight=True,
-            width_scale=0.0001,
-            get_width="outbound",
-            width_min_pixels=3,
-            width_max_pixels=30,
-        ),
-    }
-    st.sidebar.markdown("### Map Layers")
-    selected_layers = [
-        layer
-        for layer_name, layer in ALL_LAYERS.items()
-        if st.sidebar.checkbox(layer_name, True)
-    ]
-    if selected_layers:
-        st.pydeck_chart(
-            pdk.Deck(
-                map_style="mapbox://styles/mapbox/light-v9",
-                initial_view_state={
-                    "latitude": 37.76,
-                    "longitude": -122.4,
-                    "zoom": 11,
-                    "pitch": 50,
-                },
-                layers=selected_layers,
-            )
-        )
-    else:
-        st.error("Please choose at least one layer above.")
-except URLError as e:
-    st.error(
-        """
-        **This demo requires internet access.**
-        Connection error: %s
-    """
-        % e.reason
+    exports_chart = alt.Chart(exports_sum_by_partners).mark_bar().encode(
+        x='Quantityintonnes:Q',
+        y=alt.Y('Partner:N', sort='-x')
+    ).properties(
+        title=f"Dairy Exports by Partner - {selected_year}",
+        width=600,
+        height=400
     )
-
-
-# In[ ]:
-
-
-
-
+    st.altair_chart(exports_chart)
