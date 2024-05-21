@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 #!pip install streamlit
+#!pip install plotly
+
 
 import streamlit as st
 import pydeck as pdk
