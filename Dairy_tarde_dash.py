@@ -2,12 +2,7 @@
 # coding: utf-8
 import streamlit as st
 import pandas as pd
-
-try:
-    import plotly.express as px
-except ImportError as e:
-    st.error(f"Error importing plotly: {e}")
-    st.stop()
+import plotly.express as px
 
 @st.cache
 def load_data(uploaded_file):
