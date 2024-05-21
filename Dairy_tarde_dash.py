@@ -12,8 +12,8 @@ def load_data(file):
 uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
 uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
 
-imports_data = load_data_from_google_drive(imports_url)
-exports_data = load_data_from_google_drive(exports_url)
+imports_data = load_data(uploaded_imports)
+exports_data = load_data(uploaded_exports)
 
 st.header("Ireland's Dairy Trade Analysis")
 
