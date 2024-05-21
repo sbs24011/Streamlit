@@ -22,7 +22,7 @@ if imports_data is not None and exports_data is not None:
 
     filtered_imports = imports_data[imports_data['ProductGroup'] == selected_product_group]
     filtered_exports = exports_data[exports_data['ProductGroup'] == selected_product_group]
-
+    
     summary_imports = filtered_imports.groupby('year')['Quantity'].sum().reset_index()
     chart_imports = px.bar(summary_imports, x='year', y='Quantity', title=f"Imports of {selected_product_group} Over Years",
                            color_discrete_sequence=['#1f77b4'])
