@@ -1,6 +1,10 @@
+#!/usr/bin/env python
+# coding: utf-8
+#!pip install streamlit
+
 import streamlit as st
+import pydeck as pdk
 import pandas as pd
-import plotly.express as px
 
 @st.cache
 def load_data(uploaded_file):
