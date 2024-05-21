@@ -1,11 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
-#!pip install streamlit
-
 import streamlit as st
-import pydeck as pdk
 import pandas as pd
-
+import plotly.express as px
 
 @st.cache
 def load_data(uploaded_file):
@@ -16,9 +11,8 @@ def load_data(uploaded_file):
 uploaded_imports = st.file_uploader("ireland_exports", type="csv")
 uploaded_exports = st.file_uploader("ireland_imports", type="csv")
 
-years = [2021,2022, 2023]
+years = [2021, 2022, 2023]
 selected_year = st.selectbox("Select Year", years)
-
 
 imports_data = load_data(uploaded_imports)
 exports_data = load_data(uploaded_exports)
@@ -34,24 +28,10 @@ if imports_data is not None and exports_data is not None:
     exports_sum_by_partners = exports_data[exports_data['year'] == selected_year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
     st.write(exports_sum_by_partners)
 
-    # Visualization using Altair
+    # Visualization using Plotly Express
     st.subheader("Bar Chart Visualization")
-    imports_chart = alt.Chart(imports_sum_by_partners).mark_bar().encode(
-        x='Quantityintonnes:Q',
-        y=alt.Y('Partner:N', sort='-x')
-    ).properties(
-        title=f"Dairy Imports by Partner - {selected_year}",
-        width=600,
-        height=400
-    )
-    st.altair_chart(imports_chart)
+    imports_chart = px.bar(imports_sum_by_partners, x='Quantityintonnes', y='Partner', orientation='h', title=f"Dairy Imports by Partner - {selected_year}")
+    st.plotly_chart(imports_chart)
 
-    exports_chart = alt.Chart(exports_sum_by_partners).mark_bar().encode(
-        x='Quantityintonnes:Q',
-        y=alt.Y('Partner:N', sort='-x')
-    ).properties(
-        title=f"Dairy Exports by Partner - {selected_year}",
-        width=600,
-        height=400
-    )
-    st.altair_chart(exports_chart)
+    exports_chart = px.bar(exports_sum_by_partners, x='Quantityintonnes', y='Partner', orientation='h', title=f"Dairy Exports by Partner - {selected_year}")
+    st.plotly_chart(exports_chart)
