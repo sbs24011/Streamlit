@@ -32,10 +32,13 @@ if imports_data is not None and exports_data is not None:
     exports_sum_by_partners = exports_data[exports_data['year'] == selected_year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
     st.write(exports_sum_by_partners)
 
-    # Visualization using Plotly Express
-    st.subheader("Bar Chart Visualization")
-    imports_chart = px.bar(imports_sum_by_partners, x='Quantityintonnes', y='Partner', orientation='h', title=f"Dairy Imports by Partner - {selected_year}")
-    st.plotly_chart(imports_chart)
+    # Check if the DataFrame is not empty before creating the visualization
+    if not imports_sum_by_partners.empty:
+        # Visualization using Plotly Express
+        st.subheader("Bar Chart Visualization")
+        imports_chart = px.bar(imports_sum_by_partners, x='Quantityintonnes', y='Partner', orientation='h', title=f"Dairy Imports by Partner - {selected_year}")
+        st.plotly_chart(imports_chart)
 
-    exports_chart = px.bar(exports_sum_by_partners, x='Quantityintonnes', y='Partner', orientation='h', title=f"Dairy Exports by Partner - {selected_year}")
-    st.plotly_chart(exports_chart)
+    if not exports_sum_by_partners.empty:
+        exports_chart = px.bar(exports_sum_by_partners, x='Quantityintonnes', y='Partner', orientation='h', title=f"Dairy Exports by Partner - {selected_year}")
+        st.plotly_chart(exports_chart)
