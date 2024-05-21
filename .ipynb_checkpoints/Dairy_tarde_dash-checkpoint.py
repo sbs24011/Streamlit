@@ -12,7 +12,7 @@ def load_data(file):
 def plot_data(data, title, year, colour, max_results):
     st.subheader(title)
     summary = data[data['year'] == year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
-    summary = summary.sort_values(by='Quantityintonnes', ascending=False)
+    summary = summary.sort_values(by='Quantityintonnes', ascending=True)
     # st.write(summary)
     if max_results != 'No Limit':
         summary = summary.head(int(max_results))
