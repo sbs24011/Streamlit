@@ -20,8 +20,13 @@ def plot_data(data, title, year, colour, max_results):
     chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour], category_orders={"Partner": summary['Partner'].values.tolist()})
     st.plotly_chart(chart)
 
-uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
-uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
+#uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
+#uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+imports_file = os.path.join(current_dir, "imports.csv")
+exports_file = os.path.join(current_dir, "exports.csv")
+
 selected_year = st.selectbox("Select Year", [2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010])
 
 imports_data = load_data(uploaded_imports)
