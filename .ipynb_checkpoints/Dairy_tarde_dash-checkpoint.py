@@ -9,10 +9,14 @@ def load_data(file):
         return pd.read_csv(file)
     return None
 
-def plot_data(data, title, year, colour):
+def plot_data(data, title, year, colour, max_results):
     st.subheader(title)
     summary = data[data['year'] == year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
+    summary = summary.sort_values(by='Quantityintonnes', ascending=False)
     # st.write(summary)
+    if max_results != 'No Limit':
+        summary = summary.head(int(max_results))
+        
     chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour])
     st.plotly_chart(chart)
 
@@ -28,10 +32,12 @@ st.header("Ireland's Dairy Trade Analysis")
 if imports_data is not None and exports_data is not None:
     selected_product_group = st.selectbox("Select Product Group", imports_data['ProductGroup'].unique())
 
+    selected_max_results = st.selectbox("Select Maximum Results per Graph", ['No Limit', '5', '10', '20'])
+
     filtered_imports = imports_data[imports_data['ProductGroup'] == selected_product_group]
     filtered_exports = exports_data[exports_data['ProductGroup'] == selected_product_group]
 
-    plot_data(filtered_imports,f"Imports of {selected_product_group} on {selected_year}", selected_year, '#1f77b4')
-    plot_data(filtered_exports,f"Exports of {selected_product_group} on {selected_year}", selected_year, '#ff7f0e')
+    plot_data(filtered_imports, f"Imports of {selected_product_group} on {selected_year}", selected_year, '#1f77b4', selected_max_results)
+    plot_data(filtered_exports, f"Exports of {selected_product_group} on {selected_year}", selected_year, '#ff7f0e', selected_max_results)
 else:
     st.write("Please upload both imports and exports CSV files.")
