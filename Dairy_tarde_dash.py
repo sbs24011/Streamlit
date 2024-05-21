@@ -8,12 +8,11 @@ import gdown
 def load_data_from_google_drive(url):
     output_file = "/tmp/ireland_data.csv"
     gdown.download(url, output_file, quiet=False)
-    return pd.read_csv(output_file, delimiter=';')
-
+    return pd.read_csv(output_file)
 
 # Google Drive URLs for datasets
-imports_url = "https://drive.google.com/uc?id=1fkHA9OjW97qqhL2Eci6FYNah3hfqkw45"
-exports_url = "https://drive.google.com/uc?id=1I8gCIZ8ASIk_Qk_hJ5S_IN61D9bvCA2a"
+imports_url = "https://drive.google.com/file/d/1fkHA9OjW97qqhL2Eci6FYNah3hfqkw45"
+exports_url = "https://drive.google.com/file/d/1I8gCIZ8ASIk_Qk_hJ5S_IN61D9bvCA2a"
 
 # Load data
 imports_data = load_data_from_google_drive(imports_url)
