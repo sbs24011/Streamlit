@@ -5,8 +5,4 @@ scipy
 matplotlib
 plotly==5.9.0
 gdown
-StandardScaler
-TSNE
-calendar
-statsmodels
 scikit-learn
