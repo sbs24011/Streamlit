@@ -22,6 +22,14 @@ def plot_data(data, title, year, colour, max_results):
 # Data URLs
 imports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv"
 exports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv"
+ireland_totals_by_product_group = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_product_group.csv"
+ireland_totals_by_partner = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner.csv"
+ireland_export_partners_2023 = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023.csv"
+nl_totals_by_partners2023 = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023.csv"
+best_prediction_df = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df.csv"
+
+
+
 
 # UI Elements
 selected_year = st.selectbox("Select Year", list(range(2023, 2010, -1)))
@@ -49,8 +57,6 @@ else:
 
 # Second visualization: Ireland's Export Quantity and Value Over the Years
 st.header("Ireland's Export Quantity and Value Over the Years")
-
-ireland_totals_by_product_group = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_product_group.csv")  # Replace with actual URL
 fig2 = go.Figure()
 
 initial_year = ireland_totals_by_product_group['year'].min()
@@ -164,8 +170,6 @@ st.plotly_chart(fig2)
 # Third visualization: Ireland Export Partners Over Time
 st.header("Ireland Export Partners Over Time")
 
-ireland_totals_by_partner = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner.csv")  # Replace with actual URL
-
 fig_quantity = px.choropleth(ireland_totals_by_partner,
                              locations="Alpha-3code_Partner",
                              color="Quantityintonnes",
@@ -247,9 +251,6 @@ st.plotly_chart(fig3)
 # Fourth visualization: 2023 Dairy Trade Partners Comparison
 st.header("2023 Dairy Trade Partners Comparison")
 
-ireland_export_partners_2023 = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023.csv")  # Replace with actual URL
-nl_totals_by_partners2023 = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023.csv")  # Replace with actual URL
-
 fig4 = px.choropleth(ireland_export_partners_2023,
                      locations="Alpha-3code_Partner",
                      title="Ireland Export Partners by Value in thousand euro in 2023",
@@ -268,8 +269,6 @@ st.plotly_chart(fig5)
 
 # Dash app equivalent in Streamlit: Forecasted Quantity using Random Forest Regressor
 st.header("Forecasted Quantity using Random Forest Regressor")
-
-best_prediction_df = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df.csv")  # Replace with actual URL
 
 unique_months = best_prediction_df['month'].unique()
 unique_years = best_prediction_df['year'].unique()
