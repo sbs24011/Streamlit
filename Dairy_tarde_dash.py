@@ -106,11 +106,13 @@ if ireland_totals_by_product_group is not None:
         xaxis_title='Product Group',
         yaxis=dict(
             title='Quantity in tonnes',
+            range=[0, 300000],
             titlefont=dict(color='#1f77b4'),
             tickfont=dict(color='#1f77b4')
         ),
         yaxis2=dict(
             title='Value per tonne',
+            range=[0, 20],
             titlefont=dict(color='#ff7f0e'),
             tickfont=dict(color='#ff7f0e'),
             overlaying='y',
