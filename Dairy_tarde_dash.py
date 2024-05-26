@@ -63,28 +63,23 @@ if ireland_export_partners_2023 is not None:
 # Handling forecast visualization with data checks
 if best_prediction_df is not None:
     st.header("Forecasted Quantity using Random Forest Regressor")
-    # unique_months = best_prediction_df['month'].unique()
     unique_years = best_prediction_df['year'].unique()
     unique_months = range(1, 13)
     month_names = {month: calendar.month_name[month] for month in unique_months}
-    
-    st.write("test")
-    st.write(month_names)
-    st.write(unique_months)
 
     selected_country = st.selectbox("Select Country", best_prediction_df['Partner'].unique())
     selected_limit = st.selectbox("Select Limit", [5, 10, 20, -1], format_func=lambda x: "No limit" if x == -1 else f"Top {x} products")
-#     selected_month = st.slider("Select Month", 0, len(unique_months) - 1, 0, format=lambda x: month_names[unique_months[x]])
+    selected_month = st.slider("Select Month", 0, len(unique_months) - 1, 0, format=lambda x: month_names[unique_months[x]])
 
-#     filtered_df = best_prediction_df[
-#         (best_prediction_df['month'] == unique_months[selected_month]) &
-#         (best_prediction_df['year'] == unique_years[0]) &
-#         (best_prediction_df['Partner'] == selected_country)
-#     ]
+    filtered_df = best_prediction_df[
+        (best_prediction_df['month'] == unique_months[selected_month]) &
+        (best_prediction_df['year'] == unique_years[0]) &
+        (best_prediction_df['Partner'] == selected_country)
+    ]
 
-#     if selected_limit != -1:
-#         filtered_df = filtered_df.nlargest(selected_limit, 'RF_ForecastedQuantity')
+    if selected_limit != -1:
+        filtered_df = filtered_df.nlargest(selected_limit, 'RF_ForecastedQuantity')
 
-#     fig_forecast = px.bar(filtered_df, x='ProductGroup', y='RF_ForecastedQuantity', color='ProductGroup',
-#                           title=f'Forecasted Export Quantity for {month_names[unique_months[selected_month]]} {unique_years[0]}')
-#     st.plotly_chart(fig_forecast)
+    fig_forecast = px.bar(filtered_df, x='ProductGroup', y='RF_ForecastedQuantity', color='ProductGroup',
+                          title=f'Forecasted Export Quantity for {month_names[unique_months[selected_month]]} {unique_years[0]}')
+    st.plotly_chart(fig_forecast)
