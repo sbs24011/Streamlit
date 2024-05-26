@@ -105,7 +105,7 @@ if milk_prices_df is not None:
         filtered_milk_prices_df.drop(columns=["Raw milk price"])
         
     dynamic_milk_prices_map = px.choropleth(filtered_milk_prices_df,
-                         locations="Alpha-3code_Country",
+                         locations="Country",
                          title=f"{selected_milk_type} milk price (Euros per 100Kg) - {milk_prices_selected_year}",
                          color=f"{selected_milk_type} milk price",
                          hover_name="Country",
