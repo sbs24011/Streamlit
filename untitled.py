@@ -1,62 +1,88 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import gdown
-import os
 import plotly.graph_objects as go
+import plotly.express as px
 from sklearn.preprocessing import StandardScaler
 from sklearn.manifold import TSNE
 import numpy as np
 import calendar
+import pandas as pd
 
-@st.cache_data(hash_funcs={pd.DataFrame: lambda _: None})
-def load_data(file):
-    if file is not None:
-        return pd.read_csv(file)
-    return None
+milk_prices_df = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/milk_prices_df_steamlit.csv"
+ireland_totals_by_product_group = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_product_group_steamlit.csv"
+ireland_totals_by_partner = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner_steamlit.csv"
+ireland_export_partners_2023 = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023_steamlit.csv"
+nl_totals_by_partners2023 = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023_steamlit.csv"
+principal_components = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/principal_components_steamlit.csv"
+challenge_other = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/challenge_other_steamlit.csv"
+best_prediction_df = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df_steamlit.csv"
+#################################################################################
 
-def plot_data(data, title, year, colour, max_results):
-    st.subheader(title)
-    summary = data[data['year'] == year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
-    summary = summary.sort_values(by='Quantityintonnes', ascending=False)
-    # st.write(summary)
-    if max_results != 'No Limit':
-        summary = summary.head(int(max_results))
-        
-    chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour], category_orders={"Partner": summary['Partner'].values.tolist()})
-    st.plotly_chart(chart)
 
-#uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
-#uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
 
-imports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv"
-exports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv"
 
-selected_year = st.selectbox("Select Year", [2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010])
+st.set_page_config(layout="wide")
 
-imports_data = load_data(imports_url)
-exports_data = load_data(exports_url)
+# Create a midpoint for the color scale
+midpoint = 50
 
-st.header("Ireland's Dairy Trade Analysis")
+# First visualization
+st.header("Milk Prices in Europe (EUR)")
 
-if imports_data is not None and exports_data is not None:
-    selected_dataset = st.selectbox("Select the Dataset for Plotting", ['Both', 'Imports', 'Exports'])
-    selected_product_group = st.selectbox("Select Product Group", imports_data['ProductGroup'].unique())
+initial_year = milk_prices_df['year'].min()
+df_initial = milk_prices_df[milk_prices_df['year'] == initial_year]
 
-    selected_max_results = st.selectbox("Select Maximum Results per Plot", ['No Limit', '5', '10', '20'])
+fig1 = go.Figure()
 
-    filtered_imports = imports_data[imports_data['ProductGroup'] == selected_product_group]
-    filtered_exports = exports_data[exports_data['ProductGroup'] == selected_product_group]
+fig1.add_trace(go.Choropleth(
+    locations=df_initial['Country'],
+    z=df_initial['Raw milk price'],
+    locationmode='country names',
+    colorscale="Viridis",
+    zmid=midpoint,
+    zmin=25,
+    zmax=75,
+    name=f'Raw {initial_year}',
+    showscale=True,
+    hoverinfo="location+z"
+))
+fig1.add_trace(go.Choropleth(
+    locations=df_initial['Country'],
+    z=df_initial['Organic raw milk price'],
+    locationmode='country names',
+    colorscale="Viridis",
+    zmid=midpoint,
+    zmin=25,
+    zmax=75,
+    name=f'Organic {initial_year}',
+    showscale=True,
+    hoverinfo="location+z"
+))
 
-    if selected_dataset in ['Both', 'Imports']: 
-        plot_data(filtered_imports, f"Imports of {selected_product_group} on {selected_year}", selected_year, '#1f77b4', selected_max_results)
-    if selected_dataset in ['Both', 'Exports']: 
-        plot_data(filtered_exports, f"Exports of {selected_product_group} on {selected_year}", selected_year, '#ff7f0e', selected_max_results)
-else:
-    st.write("Please upload both imports and exports CSV files.")
-
-########################################################################################################
-
+frames = []
+for year in sorted(milk_prices_df['year'].unique()):
+    df_year = milk_prices_df[milk_prices_df['year'] == year]
+    frames.append(go.Frame(
+        data=[
+            go.Choropleth(
+                locations=df_year['Country'],
+                z=df_year['Raw milk price'],
+                locationmode='country names',
+                colorscale="Viridis",
+                zmid=midpoint,
+                zmin=25,
+                zmax=75,
+                showscale=True,
+                hoverinfo="location+z"
+            ),
+            go.Choropleth(
+                locations=df_year['Country'],
+                z=df_year['Organic raw milk price'],
+                locationmode='country names',
+                colorscale="Viridis",
+                zmid=midpoint,
+                zmin=25,
+                zmax=75,
                 showscale=True,
                 hoverinfo="location+z"
             )
@@ -437,3 +463,4 @@ fig_dash.update_layout(
 )
 
 st.plotly_chart(fig_dash)
+
