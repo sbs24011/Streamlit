@@ -77,14 +77,16 @@ if ireland_totals_by_product_group is not None:
     
     ireland_totals_by_product_group_filtered_data = ireland_totals_by_product_group[ireland_totals_by_product_group['year'] == selected_year]
     
+    fig = go.Figure()
+    
     fig.add_trace(
-    go.Bar(
-        x=filtered_data['ProductGroup'],
-        y=filtered_data['Quantityintonnes'],
-        name='Quantity in tonnes',
-        yaxis='y1'
+        go.Bar(
+            x=filtered_data['ProductGroup'],
+            y=filtered_data['Quantityintonnes'],
+            name='Quantity in tonnes',
+            yaxis='y1'
+        )
     )
-)
 
     # Value per tonne on the right y-axis
     fig.add_trace(
