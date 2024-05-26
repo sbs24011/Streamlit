@@ -69,6 +69,7 @@ if best_prediction_df is not None:
     
     st.write("test")
     st.write(month_names)
+    st.write(unique_months)
 
     selected_country = st.selectbox("Select Country", best_prediction_df['Partner'].unique())
     selected_limit = st.selectbox("Select Limit", [5, 10, 20, -1], format_func=lambda x: "No limit" if x == -1 else f"Top {x} products")
