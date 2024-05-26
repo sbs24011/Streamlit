@@ -99,12 +99,10 @@ if milk_prices_df is not None:
         (milk_prices_df['year'] == milk_prices_selected_year)
     ]
     
-    st.write(filtered_milk_prices_df.head())
-    
     if (selected_milk_type == "Raw"):
-        filtered_milk_prices_df.drop("Organic raw milk price")
+        filtered_milk_prices_df.drop(columns=["Organic raw milk price"])
     else:
-        filtered_milk_prices_df.drop("Raw milk price")
+        filtered_milk_prices_df.drop(columns=["Raw milk price"])
         
     dynamic_milk_prices_map = px.choropleth(filtered_milk_prices_df,
                          locations="Alpha-3code_Partner",
