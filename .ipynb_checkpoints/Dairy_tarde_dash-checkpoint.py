@@ -1,39 +1,34 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import gdown
-import os
 import plotly.graph_objects as go
 from sklearn.preprocessing import StandardScaler
 from sklearn.manifold import TSNE
 import numpy as np
 import calendar
 
-@st.cache_data(hash_funcs={pd.DataFrame: lambda _: None})
-def load_data(file):
-    if file is not None:
-        return pd.read_csv(file)
-    return None
+@st.cache_data
+def load_data(url):
+    return pd.read_csv(url)
 
 def plot_data(data, title, year, colour, max_results):
     st.subheader(title)
     summary = data[data['year'] == year].groupby('Partner')['Quantityintonnes'].sum().reset_index()
     summary = summary.sort_values(by='Quantityintonnes', ascending=False)
-    # st.write(summary)
     if max_results != 'No Limit':
         summary = summary.head(int(max_results))
         
-    chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour], category_orders={"Partner": summary['Partner'].values.tolist()})
+    chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[colour])
     st.plotly_chart(chart)
 
-#uploaded_imports = st.file_uploader("Upload Ireland Imports CSV", type="csv")
-#uploaded_exports = st.file_uploader("Upload Ireland Exports CSV", type="csv")
-
+# Data URLs
 imports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv"
 exports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv"
 
-selected_year = st.selectbox("Select Year", [2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010])
+# UI Elements
+selected_year = st.selectbox("Select Year", list(range(2023, 2010, -1)))
 
+# Load Data
 imports_data = load_data(imports_url)
 exports_data = load_data(exports_url)
 
@@ -42,82 +37,22 @@ st.header("Ireland's Dairy Trade Analysis")
 if imports_data is not None and exports_data is not None:
     selected_dataset = st.selectbox("Select the Dataset for Plotting", ['Both', 'Imports', 'Exports'])
     selected_product_group = st.selectbox("Select Product Group", imports_data['ProductGroup'].unique())
-
     selected_max_results = st.selectbox("Select Maximum Results per Plot", ['No Limit', '5', '10', '20'])
 
     filtered_imports = imports_data[imports_data['ProductGroup'] == selected_product_group]
     filtered_exports = exports_data[exports_data['ProductGroup'] == selected_product_group]
 
     if selected_dataset in ['Both', 'Imports']: 
-        plot_data(filtered_imports, f"Imports of {selected_product_group} on {selected_year}", selected_year, '#1f77b4', selected_max_results)
+        plot_data(filtered_imports, f"Imports of {selected_product_group} in {selected_year}", selected_year, '#1f77b4', selected_max_results)
     if selected_dataset in ['Both', 'Exports']: 
-        plot_data(filtered_exports, f"Exports of {selected_product_group} on {selected_year}", selected_year, '#ff7f0e', selected_max_results)
+        plot_data(filtered_exports, f"Exports of {selected_product_group} in {selected_year}", selected_year, '#ff7f0e', selected_max_results)
 else:
     st.write("Please upload both imports and exports CSV files.")
 
-########################################################################################################
-
-                showscale=True,
-                hoverinfo="location+z"
-            )
-        ],
-        name=str(year)
-    ))
-
-fig1.update_layout(
-    title_text="Milk Prices in Europe (EUR)",
-    geo=dict(scope='europe'),
-    updatemenus=[{
-        'buttons': [
-            {
-                'args': [{'visible': [trace.name.startswith('Raw') for trace in fig1.data]}],
-                'label': 'Raw Milk',
-                'method': 'update'
-            },
-            {
-                'args': [{'visible': [trace.name.startswith('Organic') for trace in fig1.data]}],
-                'label': 'Organic Milk',
-                'method': 'update'
-            }
-        ],
-        'direction': 'down',
-        'pad': {'r': 10, 't': 10},
-        'showactive': True,
-        'x': 0.1,
-        'xanchor': 'left',
-        'y': 1.15,
-        'yanchor': 'top'
-    }],
-    sliders=[{
-        'steps': [
-            {
-                'args': [
-                    [str(year)],
-                    {
-                        'frame': {'duration': 500, 'redraw': True},
-                        'mode': 'immediate',
-                        'transition': {'duration': 0}
-                    }
-                ],
-                'label': str(year),
-                'method': 'animate'
-            } for year in sorted(milk_prices_df['year'].unique())
-        ],
-        'x': 0.1,
-        'len': 0.9,
-        'xanchor': 'left',
-        'y': -0.3,
-        'yanchor': 'top'
-    }]
-)
-
-fig1.update(frames=frames)
-
-st.plotly_chart(fig1)
-
-# Second visualization
+# Second visualization: Ireland's Export Quantity and Value Over the Years
 st.header("Ireland's Export Quantity and Value Over the Years")
 
+ireland_totals_by_product_group = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_product_group.csv")  # Replace with actual URL
 fig2 = go.Figure()
 
 initial_year = ireland_totals_by_product_group['year'].min()
@@ -228,8 +163,10 @@ fig2.update_layout(
 
 st.plotly_chart(fig2)
 
-# Third visualization
+# Third visualization: Ireland Export Partners Over Time
 st.header("Ireland Export Partners Over Time")
+
+ireland_totals_by_partner = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner.csv")  # Replace with actual URL
 
 fig_quantity = px.choropleth(ireland_totals_by_partner,
                              locations="Alpha-3code_Partner",
@@ -309,8 +246,11 @@ fig3.update_layout(
 
 st.plotly_chart(fig3)
 
-# Fourth visualization
+# Fourth visualization: 2023 Dairy Trade Partners Comparison
 st.header("2023 Dairy Trade Partners Comparison")
+
+ireland_export_partners_2023 = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023.csv")  # Replace with actual URL
+nl_totals_by_partners2023 = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023.csv")  # Replace with actual URL
 
 fig4 = px.choropleth(ireland_export_partners_2023,
                      locations="Alpha-3code_Partner",
@@ -318,7 +258,7 @@ fig4 = px.choropleth(ireland_export_partners_2023,
                      color="Valueinthousandeuro",
                      hover_name="Partner",
                      color_continuous_scale=px.colors.sequential.Plasma)
-fig4.show()
+st.plotly_chart(fig4)
 
 fig5 = px.choropleth(nl_totals_by_partners2023,
                      locations="Alpha-3code_Partner",
@@ -326,16 +266,30 @@ fig5 = px.choropleth(nl_totals_by_partners2023,
                      color="Valueinthousandeuro",
                      hover_name="Partner",
                      color_continuous_scale=px.colors.sequential.Plasma)
-fig5.show()
-
-st.plotly_chart(fig4)
 st.plotly_chart(fig5)
 
-# Machine learning visualization
+# Machine learning visualization: Interactive Word Cloud for All Clusters
 st.header("Interactive Word Cloud for All Clusters")
 
-fig_ml = go.Figure()
+def generate_word_vectors(words):
+    return np.random.rand(len(words), 2)  # Placeholder for actual word vector generation
 
+def get_tsne_coordinates(word_vectors, perplexity):
+    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
+    return tsne.fit_transform(word_vectors)
+
+def add_jitter(coordinates, jitter):
+    return coordinates + np.random.normal(0, jitter, coordinates.shape)
+
+top_keywords_kmeans = {
+    "Cluster 1": ["milk", "dairy", "cheese"],
+    "Cluster 2": ["butter", "cream", "yogurt"],
+    "Cluster 3": ["whey", "casein", "lactose"],
+    "Cluster 4": ["ice", "cream", "milkshake"],
+    "Cluster 5": ["kefir", "buttermilk", "curd"]
+}
+
+fig_ml = go.Figure()
 colors = ['blue', 'green', 'red', 'orange', 'purple']
 shapes = ['circle', 'square', 'diamond', 'cross', 'x']
 
@@ -345,7 +299,7 @@ for i, ((cluster, words), color, shape) in enumerate(zip(top_keywords_kmeans.ite
     word_vectors = scaler.fit_transform(word_vectors)
     perplexity = min(50, len(words) - 1)
     coordinates = get_tsne_coordinates(word_vectors, perplexity)
-    coordinates = add_jitter(coordinates, jitter=0.2)
+    coordinates = add_jitter(coordinates, 0.2)
     
     fig_ml.add_trace(go.Scatter(
         x=coordinates[:, 0],
@@ -370,13 +324,17 @@ fig_ml.update_layout(
 
 st.plotly_chart(fig_ml)
 
-# Additional Machine Learning visualization
+# Additional Machine Learning visualization: PCA of Clusters with Top Words
 st.header("PCA of Clusters with Top Words")
 
+principal_components = np.random.rand(100, 2)  # Placeholder for actual PCA data
+kmeans_labels = np.random.randint(0, 5, 100)  # Placeholder for actual KMeans labels
+challenge_other = pd.Series(np.random.choice(['milk', 'butter', 'cheese', 'cream'], 100))  # Placeholder for actual data
+
 df_pca = pd.DataFrame(data=principal_components, columns=['PC1', 'PC2'])
-df_pca['Cluster'] = kmeans.labels_
+df_pca['Cluster'] = kmeans_labels
 df_pca['Text'] = challenge_other.values
-df_pca['Top_Words'] = df_pca['Cluster'].map(lambda x: ', '.join(top_keywords_kmeans[f'Cluster {x}']))
+df_pca['Top_Words'] = df_pca['Cluster'].map(lambda x: ', '.join(top_keywords_kmeans[f'Cluster {x+1}']))
 
 df_pca['customdata'] = df_pca.apply(lambda row: [row['Top_Words'], row['Text']], axis=1)
 
@@ -392,11 +350,12 @@ fig_pca.update_traces(marker=dict(size=10),
                                     "Top Words: %{customdata[0]}<br>"
                                     "Text: %{customdata[1]}<extra></extra>")
 
-
 st.plotly_chart(fig_pca)
 
-# Dash app equivalent in Streamlit
+# Dash app equivalent in Streamlit: Forecasted Quantity using Random Forest Regressor
 st.header("Forecasted Quantity using Random Forest Regressor")
+
+best_prediction_df = pd.read_csv("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df.csv")  # Replace with actual URL
 
 unique_months = best_prediction_df['month'].unique()
 unique_years = best_prediction_df['year'].unique()
