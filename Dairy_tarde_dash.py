@@ -86,7 +86,6 @@ if ireland_totals_by_product_group is not None:
             name='Quantity in tonnes',
             yaxis='y1',
             marker=dict(color='rgba(55, 83, 109, 0.7)')
-            offsetgroup=1
         )
     )
 
