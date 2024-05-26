@@ -61,8 +61,8 @@ if ireland_totals_by_partner is not None:
     
     dynamic_map = px.choropleth(filtered_totals_df,
                          locations="Alpha-3code_Partner",
-                         title="Ireland Export Partners by Value in thousand euro",
-                         color="Valueinthousandeuro",
+                         title="Ireland Export Partners by Value in thousand euro (%{selected_year})",
+                         color="Value in thousand euro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
     st.plotly_chart(dynamic_map)
@@ -74,7 +74,7 @@ if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not
     fig4 = px.choropleth(ireland_export_partners_2023,
                          locations="Alpha-3code_Partner",
                          title="Ireland Export Partners by Value in thousand euro in 2023",
-                         color="Valueinthousandeuro",
+                         color="Value in thousand euro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
     st.plotly_chart(fig4)
@@ -82,7 +82,7 @@ if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not
     fig5 = px.choropleth(nl_totals_by_partners2023,
                          locations="Alpha-3code_Partner",
                          title="Netherlands Export Partners by Value in thousand euro in 2023",
-                         color="Valueinthousandeuro",
+                         color="Value in thousand euro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
     st.plotly_chart(fig5)
