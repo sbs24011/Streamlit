@@ -67,6 +67,7 @@ if best_prediction_df is not None:
     unique_years = best_prediction_df['year'].unique()
     month_names = {month: calendar.month_name[month] for month in unique_months}
     
+    print("test")
     print(month_names)
 
     selected_country = st.selectbox("Select Country", best_prediction_df['Partner'].unique())
