@@ -26,10 +26,10 @@ selected_year = st.selectbox("Select Year", year_options)
 # Load Data
 imports_data = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv")
 exports_data = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv")
-ireland_totals_by_partner = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner.csv")
+ireland_totals_by_partner = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner_steamlit.csv")
 ireland_export_partners_2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023_steamlit.csv")
-nl_totals_by_partners2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023.csv")
-best_prediction_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df.csv")
+nl_totals_by_partners2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023_steamlit.csv")
+best_prediction_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df_steamlit.csv")
 
 # Ensure data is loaded
 if imports_data is not None and exports_data is not None:
