@@ -8,3 +8,5 @@ gdown
 StandardScaler
 TSNE
 calendar
+statsmodels
+scikit-learn
