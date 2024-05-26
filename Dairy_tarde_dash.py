@@ -99,6 +99,8 @@ if milk_prices_df is not None:
         (milk_prices_df['year'] == milk_prices_selected_year)
     ]
     
+    st.write(filtered_milk_prices_df.info())
+    
     if (selected_milk_type == "Raw"):
         filtered_milk_prices_df.drop("Organic raw milk price")
     else:
@@ -107,7 +109,7 @@ if milk_prices_df is not None:
     dynamic_milk_prices_map = px.choropleth(filtered_milk_prices_df,
                          locations="Alpha-3code_Partner",
                          title=f"{selected_milk_type} milk price (Euros per 100Kg) - {milk_prices_selected_year}",
-                         color="Valueinthousandeuro",
+                         color=f"{selected_milk_type} milk price",
                          hover_name="Country",
                          color_continuous_scale=px.colors.sequential.Plasma,
                          scope="europe")
