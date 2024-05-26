@@ -12,13 +12,13 @@ def load_data(url):
 year_options = list(range(2023, 2010, -1))
 selected_year = st.selectbox("Select Year", year_options)
 
-# Data URLs
-imports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv"
-exports_url = "https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv"
-
 # Load Data
-imports_data = load_data(imports_url)
-exports_data = load_data(exports_url)
+imports_data = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_imports.csv")
+exports_data = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_exports.csv")
+ireland_totals_by_partner = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner.csv")
+ireland_export_partners_2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023_steamlit.csv")
+nl_totals_by_partners2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023.csv")
+best_prediction_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df.csv")
 
 # Ensure data is loaded
 if imports_data is not None and exports_data is not None:
@@ -37,22 +37,15 @@ if imports_data is not None and exports_data is not None:
             summary = summary.head(int(selected_max_results))
         chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[color])
         st.plotly_chart(chart)
-
+        
+    import_export_selected = st.multiselect("Select Dataset to Display", ['Imports', 'Exports'], default=['Imports']):
     # Filtering and plotting data
-    if 'Imports' in st.multiselect("Select Dataset to Display", ['Imports', 'Exports'], default=['Imports']):
+    if 'Imports' in import_export_selected:
         plot_data(imports_data, f"Imports of {selected_product_group} in {selected_year}", '#1f77b4')
-    if 'Exports' in st.multiselect("Select Dataset to Display", ['Imports', 'Exports'], default=['Exports']):
+    if 'Exports' in import_export_selected:
         plot_data(exports_data, f"Exports of {selected_product_group} in {selected_year}", '#ff7f0e')
 else:
     st.error("Failed to load data. Please check the data URLs and format.")
-
-try:
-    ireland_totals_by_partner = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_partner.csv")
-    ireland_export_partners_2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023_steamlit.csv")
-    nl_totals_by_partners2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023.csv")
-    best_prediction_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df.csv")
-except Exception as e:
-    st.error(f"Failed to load some datasets: {str(e)}")
 
 # Example of a simple choropleth map for 2023 export partners
 if ireland_export_partners_2023 is not None:
