@@ -72,7 +72,7 @@ if best_prediction_df is not None:
     selected_month = st.select_slider("Select Month", options=list(month_names.keys()), format_func=lambda x: month_names[x])
 
     filtered_df = best_prediction_df[
-        (best_prediction_df['month'] == unique_months[selected_month]) &
+        (best_prediction_df['month'] == selected_month) &
         (best_prediction_df['year'] == unique_years[0]) &
         (best_prediction_df['Partner'] == selected_country)
     ]
