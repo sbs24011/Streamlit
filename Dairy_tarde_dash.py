@@ -74,8 +74,7 @@ if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not
     st.header("2023 Dairy Trade Partners Comparison (Ireland and Netherlands)")
     fig4 = px.choropleth(ireland_export_partners_2023,
                          locations="Alpha-3code_Partner",
-                         tit
-                         le="Ireland Export Partners by Value in thousand euro in 2023",
+                         title="Ireland Export Partners by Value in thousand euro in 2023",
                          color="Valueinthousandeuro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
@@ -109,7 +108,7 @@ if milk_prices_df is not None:
                          locations="Alpha-3code_Partner",
                          title=f"{selected_milk_type} milk price (Euros per 100Kg) - {milk_prices_selected_year}",
                          color="Valueinthousandeuro",
-                         hover_name="Partner",
+                         hover_name="Country",
                          color_continuous_scale=px.colors.sequential.Plasma,
                          scope="europe")
     st.plotly_chart(dynamic_milk_prices_map)
