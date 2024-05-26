@@ -77,30 +77,33 @@ if ireland_totals_by_product_group is not None:
     
     ireland_totals_by_product_group_filtered_data = ireland_totals_by_product_group[ireland_totals_by_product_group['year'] == ireland_totals_by_product_group_selected_year]
     
-    fig = go.Figure()
+    ireland_totals_by_product_group_fig = go.Figure()
     
-    fig.add_trace(
+    ireland_totals_by_product_group_fig.add_trace(
         go.Bar(
             x=ireland_totals_by_product_group_filtered_data['ProductGroup'],
             y=ireland_totals_by_product_group_filtered_data['Quantityintonnes'],
             name='Quantity in tonnes',
-            yaxis='y1'
+            yaxis='y1',
+            marker=dict(color='rgba(55, 83, 109, 0.7)'),
+            offsetgroup=1
         )
     )
 
     # Value per tonne on the right y-axis
-    fig.add_trace(
-        go.Scatter(
+    ireland_totals_by_product_group_fig.add_trace(
+        go.Bar(
             x=ireland_totals_by_product_group_filtered_data['ProductGroup'],
             y=ireland_totals_by_product_group_filtered_data['Value_per_tonne'],
             name='Value per tonne',
             yaxis='y2',
-            mode='lines+markers'
+            marker=dict(color='rgba(255, 153, 51, 0.7)'),
+            offsetgroup=2
         )
     )
 
     # Update the layout for dual y-axes
-    fig.update_layout(
+    ireland_totals_by_product_group_fig.update_layout(
         title=f'Product Group Data for {ireland_totals_by_product_group_selected_year}',
         xaxis_title='Product Group',
         yaxis=dict(
@@ -119,7 +122,7 @@ if ireland_totals_by_product_group is not None:
     )
 
     # Display the chart in Streamlit
-    st.plotly_chart(fig)
+    st.plotly_chart(ireland_totals_by_product_group_fig)
 
     
 # Example of a simple choropleth map for 2023 export partners
