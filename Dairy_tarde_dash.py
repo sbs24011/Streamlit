@@ -69,7 +69,7 @@ if best_prediction_df is not None:
 
     selected_country = st.selectbox("Select Country", best_prediction_df['Partner'].unique())
     selected_limit = st.selectbox("Select Limit", [5, 10, 20, -1], format_func=lambda x: "No limit" if x == -1 else f"Top {x} products")
-    selected_month = st.select_slider("Select Month", 0, len(unique_months) - 1, 0, format_func=lambda x: month_names[unique_months[x]])
+    selected_month = st.select_slider("Select Month", options=list(month_names.keys()), format_func=lambda x: month_names[x])
 
     filtered_df = best_prediction_df[
         (best_prediction_df['month'] == unique_months[selected_month]) &
