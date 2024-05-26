@@ -75,14 +75,14 @@ if ireland_totals_by_product_group is not None:
     ireland_totals_by_product_group_years = ireland_totals_by_product_group['year'].unique()
     ireland_totals_by_product_group_selected_year = st.slider('Select Year', min_value=int(ireland_totals_by_product_group_years.min()), max_value=int(ireland_totals_by_product_group_years.max()), value=int(ireland_totals_by_product_group_years.min()))
     
-    ireland_totals_by_product_group_filtered_data = ireland_totals_by_product_group[ireland_totals_by_product_group['year'] == selected_year]
+    ireland_totals_by_product_group_filtered_data = ireland_totals_by_product_group[ireland_totals_by_product_group['year'] == ireland_totals_by_product_group_selected_year]
     
     fig = go.Figure()
     
     fig.add_trace(
         go.Bar(
-            x=filtered_data['ProductGroup'],
-            y=filtered_data['Quantityintonnes'],
+            x=ireland_totals_by_product_group_filtered_data['ProductGroup'],
+            y=ireland_totals_by_product_group_filtered_data['Quantityintonnes'],
             name='Quantity in tonnes',
             yaxis='y1'
         )
@@ -91,8 +91,8 @@ if ireland_totals_by_product_group is not None:
     # Value per tonne on the right y-axis
     fig.add_trace(
         go.Scatter(
-            x=filtered_data['ProductGroup'],
-            y=filtered_data['Value_per_tonne'],
+            x=ireland_totals_by_product_group_filtered_data['ProductGroup'],
+            y=ireland_totals_by_product_group_filtered_data['Value_per_tonne'],
             name='Value per tonne',
             yaxis='y2',
             mode='lines+markers'
@@ -101,7 +101,7 @@ if ireland_totals_by_product_group is not None:
 
     # Update the layout for dual y-axes
     fig.update_layout(
-        title=f'Product Group Data for {selected_year}',
+        title=f'Product Group Data for {ireland_totals_by_product_group_selected_year}',
         xaxis_title='Product Group',
         yaxis=dict(
             title='Quantity in tonnes',
