@@ -72,7 +72,7 @@ if ireland_totals_by_partner is not None:
 
 if ireland_totals_by_product_group is not None:
     st.header("Ireland's Export Quantity and Value Over the Years")
-    ireland_totals_by_product_group_years = ireland_totals_by_product_group['Year'].unique()
+    ireland_totals_by_product_group_years = ireland_totals_by_product_group['year'].unique()
     ireland_totals_by_product_group_selected_year = st.slider('Select Year', min_value=int(ireland_totals_by_product_group_years.min()), max_value=int(ireland_totals_by_product_group_years.max()), value=int(ireland_totals_by_product_group_years.min()))
     
     ireland_totals_by_product_group_filtered_data = ireland_totals_by_product_group[ireland_totals_by_product_group['Year'] == selected_year]
