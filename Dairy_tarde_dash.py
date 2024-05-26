@@ -63,8 +63,9 @@ if ireland_export_partners_2023 is not None:
 # Handling forecast visualization with data checks
 if best_prediction_df is not None:
     st.header("Forecasted Quantity using Random Forest Regressor")
-    unique_months = best_prediction_df['month'].unique()
+    # unique_months = best_prediction_df['month'].unique()
     unique_years = best_prediction_df['year'].unique()
+    unique_months = range(1, 13)
     month_names = {month: calendar.month_name[month] for month in unique_months}
     
     st.write("test")
