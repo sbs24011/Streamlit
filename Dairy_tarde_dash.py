@@ -93,7 +93,7 @@ if milk_prices_df is not None:
     
     milk_prices_unique_years = milk_prices_df['year'].unique()
     milk_prices_selected_year = st.select_slider("Select Year", options=milk_prices_unique_years)
-    selected_milk_type = st.selectbox("Select Milk Type", ['Raw', 'Organic raw'], default=['Raw'])
+    selected_milk_type = st.selectbox("Select Milk Type", ['Raw', 'Organic raw'])
     
     filtered_milk_prices_df = milk_prices_df[
         (milk_prices_df['year'] == milk_prices_selected_year)
