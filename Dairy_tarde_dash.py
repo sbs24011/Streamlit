@@ -100,10 +100,8 @@ if milk_prices_df is not None:
     ]
     
     if (selected_milk_type == "Raw"):
-        filtered_milk_prices_df.drop(columns=["Organic raw milk price"])
         color_column = "Raw milk price"
     else:
-        filtered_milk_prices_df.drop(columns=["Raw milk price"])
         color_column = "Organic raw milk price"
         
     dynamic_milk_prices_map = px.choropleth(filtered_milk_prices_df,
