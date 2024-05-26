@@ -56,12 +56,12 @@ if ireland_totals_by_partner is not None:
     selected_year = st.select_slider("Select Year", options=unique_years)
     
     filtered_totals_df = ireland_totals_by_partner[
-        (ireland_totals_by_partner['year'] == unique_years[0])
+        (ireland_totals_by_partner['year'] == selected_year)
     ]
     
     dynamic_map = px.choropleth(filtered_totals_df,
                          locations="Alpha-3code_Partner",
-                         title="Ireland Export Partners by Value in thousand euro in 2023",
+                         title="Ireland Export Partners by Value in thousand euro",
                          color="Valueinthousandeuro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
