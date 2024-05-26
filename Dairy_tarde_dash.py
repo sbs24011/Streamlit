@@ -108,7 +108,6 @@ if milk_prices_df is not None:
                          locations="Country",
                          title=f"{selected_milk_type} milk price (Euros per 100Kg) - {milk_prices_selected_year}",
                          color=color_column,
-                         hover_name="Country",
                          color_continuous_scale=px.colors.sequential.Plasma,
                          scope="europe")
     st.plotly_chart(dynamic_milk_prices_map)
