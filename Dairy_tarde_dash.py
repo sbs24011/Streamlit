@@ -85,7 +85,7 @@ if ireland_totals_by_product_group is not None:
             y=ireland_totals_by_product_group_filtered_data['Quantityintonnes'],
             name='Quantity in tonnes',
             yaxis='y1',
-            marker=dict(color='rgba(55, 83, 109, 0.7)'),
+            marker=dict(color='rgba(55, 83, 109, 0.7)')
             offsetgroup=1
         )
     )
@@ -97,8 +97,7 @@ if ireland_totals_by_product_group is not None:
             y=ireland_totals_by_product_group_filtered_data['Value_per_tonne'],
             name='Value per tonne',
             yaxis='y2',
-            marker=dict(color='rgba(255, 153, 51, 0.7)'),
-            offsetgroup=2
+            marker=dict(color='rgba(255, 153, 51, 0.7)')
         )
     )
 
