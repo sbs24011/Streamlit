@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import calendar
 
 # Corrected caching decorator
 @st.cache
@@ -37,10 +38,7 @@ if imports_data is not None and exports_data is not None:
 
     product_groups = imports_data['ProductGroup'].unique()
     selected_product_group = st.selectbox("Select Product Group", product_groups)
-    selected_max_results = st.selectbox("Select Maximum Results per Plot", ['No Limit', '5', '10', '20'])
-
-    
-        
+    selected_max_results = st.selectbox("Select Maximum Results per Plot", ['No Limit', '5', '10', '20'])  
     import_export_selected = st.multiselect("Select Dataset to Display", ['Imports', 'Exports'], default=['Imports'])
     
     # Filtering and plotting data
