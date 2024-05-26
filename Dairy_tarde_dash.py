@@ -49,7 +49,24 @@ if imports_data is not None and exports_data is not None:
 else:
     st.error("Failed to load data. Please check the data URLs and format.")
 
-
+if ireland_totals_by_partner is not None:
+    st.header("Dynamic map of Irelands export")
+    
+    unique_years = ireland_totals_by_partner['year'].unique()
+    selected_year = st.select_slider("Select Year", options=unique_years)
+    
+    filtered_totals_df = ireland_totals_by_partner[
+        (ireland_totals_by_partner['year'] == unique_years[0])
+    ]
+    
+    dynamic_map = px.choropleth(filtered_totals_df,
+                         locations="Alpha-3code_Partner",
+                         title="Ireland Export Partners by Value in thousand euro in 2023",
+                         color="Valueinthousandeuro",
+                         hover_name="Partner",
+                         color_continuous_scale=px.colors.sequential.Plasma)
+    st.plotly_chart(dynamic_map)
+    
     
 # Example of a simple choropleth map for 2023 export partners
 if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not None:
