@@ -32,6 +32,7 @@ ireland_export_partners_2023 = load_data("https://raw.githubusercontent.com/sbs2
 nl_totals_by_partners2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023_steamlit.csv")
 best_prediction_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df_steamlit.csv")
 milk_prices_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/milk_prices_df_steamlit.csv")
+ireland_totals_by_product_group = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_totals_by_product_group_steamlit.csv")
 
 # Ensure data is loaded
 if imports_data is not None and exports_data is not None:
@@ -68,6 +69,56 @@ if ireland_totals_by_partner is not None:
                          color_continuous_scale=px.colors.sequential.Plasma)
     st.plotly_chart(dynamic_ireland_totals_map)
     
+
+if ireland_totals_by_product_group is not None:
+    st.header("Ireland's Export Quantity and Value Over the Years")
+    ireland_totals_by_product_group_years = ireland_totals_by_product_group['Year'].unique()
+    ireland_totals_by_product_group_selected_year = st.slider('Select Year', min_value=int(ireland_totals_by_product_group_years.min()), max_value=int(ireland_totals_by_product_group_years.max()), value=int(ireland_totals_by_product_group_years.min()))
+    
+    ireland_totals_by_product_group_filtered_data = ireland_totals_by_product_group[ireland_totals_by_product_group['Year'] == selected_year]
+    
+    fig.add_trace(
+    go.Bar(
+        x=filtered_data['ProductGroup'],
+        y=filtered_data['Quantityintonnes'],
+        name='Quantity in tonnes',
+        yaxis='y1'
+    )
+)
+
+    # Value per tonne on the right y-axis
+    fig.add_trace(
+        go.Scatter(
+            x=filtered_data['ProductGroup'],
+            y=filtered_data['Value_per_tonne'],
+            name='Value per tonne',
+            yaxis='y2',
+            mode='lines+markers'
+        )
+    )
+
+    # Update the layout for dual y-axes
+    fig.update_layout(
+        title=f'Product Group Data for {selected_year}',
+        xaxis_title='Product Group',
+        yaxis=dict(
+            title='Quantity in tonnes',
+            titlefont=dict(color='#1f77b4'),
+            tickfont=dict(color='#1f77b4')
+        ),
+        yaxis2=dict(
+            title='Value per tonne',
+            titlefont=dict(color='#ff7f0e'),
+            tickfont=dict(color='#ff7f0e'),
+            overlaying='y',
+            side='right'
+        ),
+        legend=dict(x=0.1, y=1.1, orientation='h')
+    )
+
+    # Display the chart in Streamlit
+    st.plotly_chart(fig)
+
     
 # Example of a simple choropleth map for 2023 export partners
 if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not None:
