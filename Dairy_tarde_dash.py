@@ -72,7 +72,7 @@ if best_prediction_df is not None:
     selected_month = st.select_slider("Select Month", options=list(month_names.keys()), format_func=lambda x: month_names[x])
 
     filtered_df = best_prediction_df[
-        (best_prediction_df['month'] == selected_month) &
+        (best_prediction_df['month'] == selected_month - 1) &
         (best_prediction_df['year'] == unique_years[0]) &
         (best_prediction_df['Partner'] == selected_country)
     ]
@@ -81,5 +81,5 @@ if best_prediction_df is not None:
         filtered_df = filtered_df.nlargest(selected_limit, 'RF_ForecastedQuantity')
 
     fig_forecast = px.bar(filtered_df, x='ProductGroup', y='RF_ForecastedQuantity', color='ProductGroup',
-                          title=f'Forecasted Export Quantity for {month_names[unique_months[selected_month]]} {unique_years[0]}')
+                          title=f'Forecasted Export Quantity for {month_names[selected_month]} {unique_years[0]}')
     st.plotly_chart(fig_forecast)
