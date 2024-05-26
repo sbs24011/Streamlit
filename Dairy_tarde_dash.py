@@ -49,9 +49,11 @@ if imports_data is not None and exports_data is not None:
 else:
     st.error("Failed to load data. Please check the data URLs and format.")
 
+
+    
 # Example of a simple choropleth map for 2023 export partners
-if ireland_export_partners_2023 is not None:
-    st.header("2023 Dairy Trade Partners Comparison")
+if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not None:
+    st.header("2023 Dairy Trade Partners Comparison (Ireland and Netherlands)")
     fig4 = px.choropleth(ireland_export_partners_2023,
                          locations="Alpha-3code_Partner",
                          title="Ireland Export Partners by Value in thousand euro in 2023",
@@ -59,6 +61,14 @@ if ireland_export_partners_2023 is not None:
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
     st.plotly_chart(fig4)
+    
+    fig5 = px.choropleth(nl_totals_by_partners2023,
+                         locations="Alpha-3code_Partner",
+                         title="Netherlands Export Partners by Value in thousand euro in 2023",
+                         color="Valueinthousandeuro",
+                         hover_name="Partner",
+                         color_continuous_scale=px.colors.sequential.Plasma)
+    st.plotly_chart(fig5)
 
 # Handling forecast visualization with data checks
 if best_prediction_df is not None:
@@ -83,3 +93,5 @@ if best_prediction_df is not None:
     fig_forecast = px.bar(filtered_df, x='ProductGroup', y='RF_ForecastedQuantity', color='ProductGroup',
                           title=f'Forecasted Export Quantity for {month_names[selected_month]} {unique_years[0]}')
     st.plotly_chart(fig_forecast)
+    
+
