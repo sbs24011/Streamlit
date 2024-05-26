@@ -106,6 +106,7 @@ if milk_prices_df is not None:
         
     dynamic_milk_prices_map = px.choropleth(filtered_milk_prices_df,
                          locations="Country",
+                         locationmode="country names",
                          title=f"{selected_milk_type} milk price (Euros per 100Kg) - {milk_prices_selected_year}",
                          color=color_column,
                          color_continuous_scale=px.colors.sequential.Plasma,
