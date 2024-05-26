@@ -31,6 +31,7 @@ ireland_totals_by_partner = load_data("https://raw.githubusercontent.com/sbs2401
 ireland_export_partners_2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/ireland_export_partners_2023_steamlit.csv")
 nl_totals_by_partners2023 = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/nl_totals_by_partners2023_steamlit.csv")
 best_prediction_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/best_prediction_df_steamlit.csv")
+milk_prices_df = load_data("https://raw.githubusercontent.com/sbs24011/Streamlit/main/milk_prices_df_steamlit.csv")
 
 # Ensure data is loaded
 if imports_data is not None and exports_data is not None:
@@ -52,20 +53,20 @@ else:
 if ireland_totals_by_partner is not None:
     st.header("Dynamic map of Irelands export")
     
-    unique_years = ireland_totals_by_partner['year'].unique()
-    selected_year = st.select_slider("Select Year", options=unique_years)
+    ireland_totals_unique_years = ireland_totals_by_partner['year'].unique()
+    ireland_totals_selected_year = st.select_slider("Select Year", options=ireland_totals_unique_years)
     
     filtered_totals_df = ireland_totals_by_partner[
-        (ireland_totals_by_partner['year'] == selected_year)
+        (ireland_totals_by_partner['year'] == ireland_totals_selected_year)
     ]
     
-    dynamic_map = px.choropleth(filtered_totals_df,
+    dynamic_ireland_totals_map = px.choropleth(filtered_totals_df,
                          locations="Alpha-3code_Partner",
-                         title=f"Ireland Export Partners by Value in thousand euro ({selected_year})",
+                         title=f"Ireland Export Partners by Value in thousand euro ({ireland_totals_selected_year})",
                          color="Valueinthousandeuro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
-    st.plotly_chart(dynamic_map)
+    st.plotly_chart(dynamic_ireland_totals_map)
     
     
 # Example of a simple choropleth map for 2023 export partners
@@ -73,7 +74,8 @@ if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not
     st.header("2023 Dairy Trade Partners Comparison (Ireland and Netherlands)")
     fig4 = px.choropleth(ireland_export_partners_2023,
                          locations="Alpha-3code_Partner",
-                         title="Ireland Export Partners by Value in thousand euro in 2023",
+                         tit
+                         le="Ireland Export Partners by Value in thousand euro in 2023",
                          color="Valueinthousandeuro",
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
@@ -86,6 +88,31 @@ if ireland_export_partners_2023 is not None and nl_totals_by_partners2023 is not
                          hover_name="Partner",
                          color_continuous_scale=px.colors.sequential.Plasma)
     st.plotly_chart(fig5)
+    
+if milk_prices_df is not None:
+    st.header("Organic and Raw Milk prices over the years")
+    
+    milk_prices_unique_years = milk_prices_df['year'].unique()
+    milk_prices_selected_year = st.select_slider("Select Year", options=unique_years)
+    selected_milk_type = st.selectbox("Select Milk Type", ['Raw', 'Organic raw'], default=['Raw'])
+    
+    filtered_milk_prices_df = milk_prices_df[
+        (milk_prices_df['year'] == milk_prices_selected_year)
+    ]
+    
+    if (selected_milk_type == "Raw"):
+        filtered_milk_prices_df.drop("Organic raw milk price")
+    else:
+        filtered_milk_prices_df.drop("Raw milk price")
+        
+    dynamic_milk_prices_map = px.choropleth(filtered_milk_prices_df,
+                         locations="Alpha-3code_Partner",
+                         title=f"{selected_milk_type} milk price (Euros per 100Kg) - {milk_prices_selected_year}",
+                         color="Valueinthousandeuro",
+                         hover_name="Partner",
+                         color_continuous_scale=px.colors.sequential.Plasma,
+                         scope="europe")
+    st.plotly_chart(dynamic_milk_prices_map)
 
 # Handling forecast visualization with data checks
 if best_prediction_df is not None:
