@@ -8,6 +8,17 @@ import plotly.graph_objects as go
 def load_data(url):
     return pd.read_csv(url)
 
+# Plot data
+def plot_data(data, title, color):
+    st.subheader(title)
+    filtered_data = data[(data['ProductGroup'] == selected_product_group) & (data['year'] == selected_year)]
+    summary = filtered_data.groupby('Partner')['Quantityintonnes'].sum().reset_index()
+    summary = summary.sort_values(by='Quantityintonnes', ascending=False)
+    if selected_max_results != 'No Limit':
+        summary = summary.head(int(selected_max_results))
+    chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[color])
+    st.plotly_chart(chart)
+
 # UI Elements
 year_options = list(range(2023, 2010, -1))
 selected_year = st.selectbox("Select Year", year_options)
@@ -28,17 +39,10 @@ if imports_data is not None and exports_data is not None:
     selected_product_group = st.selectbox("Select Product Group", product_groups)
     selected_max_results = st.selectbox("Select Maximum Results per Plot", ['No Limit', '5', '10', '20'])
 
-    def plot_data(data, title, color):
-        st.subheader(title)
-        filtered_data = data[(data['ProductGroup'] == selected_product_group) & (data['year'] == selected_year)]
-        summary = filtered_data.groupby('Partner')['Quantityintonnes'].sum().reset_index()
-        summary = summary.sort_values(by='Quantityintonnes', ascending=False)
-        if selected_max_results != 'No Limit':
-            summary = summary.head(int(selected_max_results))
-        chart = px.bar(summary, x='Quantityintonnes', y='Partner', orientation='h', title=title, color_discrete_sequence=[color])
-        st.plotly_chart(chart)
+    
         
-    import_export_selected = st.multiselect("Select Dataset to Display", ['Imports', 'Exports'], default=['Imports']):
+    import_export_selected = st.multiselect("Select Dataset to Display", ['Imports', 'Exports'], default=['Imports'])
+    
     # Filtering and plotting data
     if 'Imports' in import_export_selected:
         plot_data(imports_data, f"Imports of {selected_product_group} in {selected_year}", '#1f77b4')
